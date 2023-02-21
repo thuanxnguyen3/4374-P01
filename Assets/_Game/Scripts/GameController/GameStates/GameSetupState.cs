@@ -20,6 +20,11 @@ public class GameSetupState : State
         base.Enter();
 
         Debug.Log("State: Game Setup");
+        /*
+        Instantiate(_controller.PlayerUnitPrefab, _controller.PlayerUnitSpawnLocation.position,
+        _controller.PlayerUnitSpawnLocation.rotation);
+        */
+        _controller.UnitSpawner.Spawn(_controller.PlayerUnitPrefab, _controller.PlayerUnitSpawnLocation);
     }
 
     public override void Exit()

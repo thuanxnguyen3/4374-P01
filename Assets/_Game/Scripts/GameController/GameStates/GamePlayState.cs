@@ -33,7 +33,7 @@ public class GamePlayState : State
     public override void Tick()
     {
         base.Tick();
-        Debug.Log("Checking for Win Condition");
-        Debug.Log("Checking for Lose Condition");
+        //Debug.Log("Checking for Win Condition");
+        //Debug.Log("Checking for Lose Condition");
     }
 }
