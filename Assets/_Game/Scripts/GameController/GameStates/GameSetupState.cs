@@ -25,6 +25,11 @@ public class GameSetupState : State
         _controller.PlayerUnitSpawnLocation.rotation);
         */
         _controller.UnitSpawner.Spawn(_controller.PlayerUnitPrefab, _controller.PlayerUnitSpawnLocation);
+
+        for (int i = 0; i < _controller.TileSpawner.tileStartCount; i++)
+        {
+            _controller.TileSpawner.Spawn(_controller.TileSpawner.startingTile.GetComponent<Tile>(), false);
+        }
     }
 
     public override void Exit()

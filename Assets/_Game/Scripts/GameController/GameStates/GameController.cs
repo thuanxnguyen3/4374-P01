@@ -10,4 +10,8 @@ public class GameController : MonoBehaviour
     public Transform PlayerUnitSpawnLocation { get; private set; }
     [field: SerializeField]
     public UnitSpawner UnitSpawner { get; private set; }
+
+
+    [field: SerializeField]
+    public TileSpawner TileSpawner { get; private set; }
 }
