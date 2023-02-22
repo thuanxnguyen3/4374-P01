@@ -28,8 +28,13 @@ public class GameSetupState : State
 
         for (int i = 0; i < _controller.TileSpawner.tileStartCount; i++)
         {
-            _controller.TileSpawner.Spawn(_controller.TileSpawner.startingTile.GetComponent<Tile>(), false);
+            _controller.TileSpawner.Spawn(_controller.TileSpawner.startingTile.GetComponent<Tile>());
         }
+
+        _controller.TileSpawner.Spawn(_controller.TileSpawner.SelectRandomGameObjectFromList(_controller.TileSpawner.turnTiles).GetComponent<Tile>());
+        /*
+        _controller.TileSpawner.Spawn(_controller.TileSpawner.turnTiles[0].GetComponent<Tile>());
+        _controller.TileSpawner.AddNewDirection(Vector3.left);*/
     }
 
     public override void Exit()
