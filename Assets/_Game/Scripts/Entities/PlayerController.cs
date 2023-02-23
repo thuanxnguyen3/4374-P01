@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
     private bool sliding = false;
     private int slidingAnimationId;
 
+    public bool isGameOver { get; private set; } = false;
+
     public void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -51,6 +53,12 @@ public class PlayerController : MonoBehaviour
     
     private void Update()
     {
+        if (!IsGrounded(20f))
+        {
+            isGameOver = true;
+            //return;
+        }
+
         characterController.Move(transform.forward * playerSpeed * Time.deltaTime);
 
         if(IsGrounded() && playerVelocity.y < 0)
@@ -87,8 +95,12 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerTurnLeft()
     {
-        Vector3? turnPosition = CheckTurn(-1);
         Debug.Log("Left swipe detected");
+        Vector3? turnPosition = CheckTurn(-1);
+        if(!turnPosition.HasValue)
+        {
+            return;
+        }
         Vector3 targetDirection = Quaternion.AngleAxis(-90, Vector3.up) * movementDirection;
         turnEvent.Invoke(targetDirection);
         Turn(-1, turnPosition.Value);
@@ -96,8 +108,12 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerTurnRight()
     {
+        Debug.Log("Right swipe detected");
         Vector3? turnPosition = CheckTurn(1);
-        Debug.Log("Left swipe detected");
+        if (!turnPosition.HasValue)
+        {
+            return;
+        }
         Vector3 targetDirection = Quaternion.AngleAxis(90, Vector3.up) * movementDirection;
         turnEvent.Invoke(targetDirection);
         Turn(1, turnPosition.Value);
@@ -147,7 +163,7 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerSlide()
     {
-        Debug.Log("Slide swipe detected");
+        Debug.Log("Down swipe detected");
         
         if (!sliding && IsGrounded())
         {
@@ -176,8 +192,8 @@ public class PlayerController : MonoBehaviour
         sliding = false;
     }
 
-    
-    public bool IsGrounded (float length = .2f)
+
+    public bool IsGrounded(float length = .2f)
     {
         Vector3 raycastOriginFirst = transform.position;
         raycastOriginFirst.y -= characterController.height / 2f;
@@ -188,10 +204,15 @@ public class PlayerController : MonoBehaviour
         raycastOriginSecond += transform.forward * .2f;
 
         if (Physics.Raycast(raycastOriginFirst, Vector3.down, out RaycastHit hit, length, groundLayer) ||
-            Physics.Raycast(raycastOriginSecond, Vector3.down, out RaycastHit hit2, length, groundLayer)) 
+            Physics.Raycast(raycastOriginSecond, Vector3.down, out RaycastHit hit2, length, groundLayer))
         {
             return true;
         }
         return false;
+    }
+
+    public bool GameOver()
+    {
+        return true;
     }
 }

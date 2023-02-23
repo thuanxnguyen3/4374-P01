@@ -40,6 +40,10 @@ public class GamePlayState : State
     public override void Tick()
     {
         base.Tick();
+        if (_controller.PlayerUnitPrefab.isGameOver == true)
+        {
+            Debug.Log("Game Over");
+        }
         //Debug.Log("Checking for Win Condition");
         //Debug.Log("Checking for Lose Condition");
 
