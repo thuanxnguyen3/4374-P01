@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(CharacterController), typeof(PlayerInput), typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Player Controller")]
@@ -22,6 +21,10 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
     [SerializeField]
     public LayerMask turnLayer;
+    [SerializeField]
+    public Animator animator;
+    [SerializeField]
+    public AnimationClip slideAnimationClip;
 
     public float playerSpeed;
     public float gravity;
@@ -36,13 +39,11 @@ public class PlayerController : MonoBehaviour
     public UnityEvent<Vector3> turnEvent;
 
     private bool sliding = false;
-    private Animator animator;
     private int slidingAnimationId;
 
     public void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
         slidingAnimationId = Animator.StringToHash("Sliding");
         _inputManager = GetComponent<InputManager>();
         _controller = GetComponent<GameController>();
@@ -147,14 +148,35 @@ public class PlayerController : MonoBehaviour
     private void PlayerSlide()
     {
         Debug.Log("Slide swipe detected");
+        
         if (!sliding && IsGrounded())
         {
-
+            StartCoroutine(Slide());
         }
 
     }
     
+    private IEnumerator Slide()
+    {
+        sliding = true;
+        // Shrink the collider
+        Vector3 originalControllerCenter = characterController.center;
+        Vector3 newControllerCenter = originalControllerCenter;
+        characterController.height /= 2;
+        newControllerCenter.y -= characterController.height / 2;
+        characterController.center = newControllerCenter;
 
+
+        // PLay the sliding animation
+        animator.Play(slidingAnimationId);
+        yield return new WaitForSeconds(slideAnimationClip.length);
+        // Set the character controller collider back to normal after sliding
+        characterController.height *= 2;
+        characterController.center = originalControllerCenter;
+        sliding = false;
+    }
+
+    
     public bool IsGrounded (float length = .2f)
     {
         Vector3 raycastOriginFirst = transform.position;
@@ -164,9 +186,6 @@ public class PlayerController : MonoBehaviour
         Vector3 raycastOriginSecond = raycastOriginFirst;
         raycastOriginFirst -= transform.forward * .2f;
         raycastOriginSecond += transform.forward * .2f;
-
-        Debug.DrawLine(raycastOriginFirst, Vector3.down, Color.green, 2f);
-
 
         if (Physics.Raycast(raycastOriginFirst, Vector3.down, out RaycastHit hit, length, groundLayer) ||
             Physics.Raycast(raycastOriginSecond, Vector3.down, out RaycastHit hit2, length, groundLayer)) 
