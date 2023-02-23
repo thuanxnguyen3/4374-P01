@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(CharacterController), typeof(PlayerInput))]
 public class GamePlayState : State
 {
     private GameFSM _stateMachine;
-    private GameController _controller;
+    private GameController _controller;    
 
     public GamePlayState(GameFSM stateMachine, GameController controller)
     {
@@ -13,11 +16,14 @@ public class GamePlayState : State
         _controller = controller;
     }
 
+
+
     public override void Enter()
     {
         base.Enter();
-
         Debug.Log("State: Play");
+        _controller.PlayerUnitPrefab.playerSpeed = _controller.PlayerUnitPrefab.initialPlayerSpeed;
+        _controller.PlayerUnitPrefab.gravity = _controller.PlayerUnitPrefab.initialGravityValue;
     }
 
     public override void Exit()
@@ -28,6 +34,7 @@ public class GamePlayState : State
     public override void FixedTick()
     {
         base.FixedTick();
+        
     }
 
     public override void Tick()
@@ -35,5 +42,6 @@ public class GamePlayState : State
         base.Tick();
         //Debug.Log("Checking for Win Condition");
         //Debug.Log("Checking for Lose Condition");
+
     }
 }

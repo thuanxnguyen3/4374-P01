@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class UnitSpawner : MonoBehaviour
 {
-    public Unit Spawn(Unit unitPrefab, Transform location)
+    public PlayerController Spawn(PlayerController unitPrefab, Transform location)
     {
         // spawn and hold on to the component tyhpe
-        Unit newUnit = Instantiate(unitPrefab, location.position, location.rotation);
+        PlayerController newUnit = Instantiate(unitPrefab, location.position, location.rotation);
 
         //TODO do setup here if needed, spawn effects, etc.
         return newUnit;

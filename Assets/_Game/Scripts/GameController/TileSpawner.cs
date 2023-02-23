@@ -30,38 +30,42 @@ public class TileSpawner : MonoBehaviour
         currentObstacles = new List<GameObject>();
 
         Random.InitState(System.DateTime.Now.Millisecond);
+        for (int i = 0; i < tileStartCount; i++)
+        {
+            SpawnTile(startingTile.GetComponent<Tile>());
+        }
+
+        SpawnTile(SelectRandomGameObjectFromList(turnTiles).GetComponent<Tile>());
 
         //SpawnTile();
     }
 
-    public Tile Spawn(Tile tile, bool spawnObstacle = false)
+    public void SpawnTile(Tile tile, bool spawnObstacle = false)
     {
         Quaternion newTileRotation = tile.gameObject.transform.rotation * Quaternion.LookRotation(currentTileDirection, Vector3.up);
 
-        Tile newTile = Instantiate(tile, currentTileLocation, newTileRotation);
-        prevTile = newTile.gameObject;
+        prevTile = GameObject.Instantiate(tile.gameObject, currentTileLocation, newTileRotation);
         currentTiles.Add(prevTile);
-        if (tile.type == TileType.STRAIGHT)
-        {
-            currentTileLocation += Vector3.Scale(prevTile.GetComponent<Renderer>().bounds.size, currentTileDirection);
-
-        }
 
         if (spawnObstacle) SpawnObstacle();
 
-        return newTile;
+        if (tile.type == TileType.STRAIGHT)
+        {
+            currentTileLocation += Vector3.Scale(prevTile.GetComponent<Renderer>().bounds.size, currentTileDirection);
+        }
+
     }
 
     public void DeletePreviousTiles()
     {
-        while (currentTiles.Count != 2)
+        while (currentTiles.Count != 1)
         {
             GameObject tile = currentTiles[0];
             currentTiles.RemoveAt(0);
             Destroy(tile);
         }
 
-        while (currentObstacles.Count != 1)
+        while (currentObstacles.Count != 0)
         {
             GameObject obstacle = currentObstacles[0];
             currentObstacles.RemoveAt(0);
@@ -91,10 +95,10 @@ public class TileSpawner : MonoBehaviour
         int currentPathLength = Random.Range(minimumStraightTiles, maximumStraightTiles);
         for(int i = 0; i < currentPathLength; i++)
         {
-            Spawn(startingTile.GetComponent<Tile>(), (i == 0) ? false : true);
+            SpawnTile(startingTile.GetComponent<Tile>(), (i == 0) ? false : true);
         }
 
-        Spawn(SelectRandomGameObjectFromList(turnTiles).GetComponent<Tile>(), false);
+        SpawnTile(SelectRandomGameObjectFromList(turnTiles).GetComponent<Tile>(), false);
     }
 
     public void SpawnObstacle()

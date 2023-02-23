@@ -90,74 +90,6 @@ public partial class @TouchAction : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""Player"",
-            ""id"": ""10a3cfb7-47e8-41bf-87f1-d638daa47842"",
-            ""actions"": [
-                {
-                    ""name"": ""Turn"",
-                    ""type"": ""Button"",
-                    ""id"": ""e2b6fc51-edd6-4bcb-b37e-b077e592c105"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""01997beb-7fbd-4be6-93b6-ba01a3443a93"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Slide"",
-                    ""type"": ""Button"",
-                    ""id"": ""07eebe8f-bfbb-4c5f-8380-b167d886304f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""225dd871-8317-42c5-9099-a66cdcd7b3e2"",
-                    ""path"": ""<Touchscreen>/Press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Turn"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a8dc966d-c498-484c-b161-a89eab00c265"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0100467a-eedb-492a-9f3a-80cbecf23d97"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Slide"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": []
@@ -167,11 +99,6 @@ public partial class @TouchAction : IInputActionCollection2, IDisposable
         m_Touch_PrimaryContact = m_Touch.FindAction("PrimaryContact", throwIfNotFound: true);
         m_Touch_PrimaryPosition = m_Touch.FindAction("PrimaryPosition", throwIfNotFound: true);
         m_Touch_Tap = m_Touch.FindAction("Tap", throwIfNotFound: true);
-        // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Turn = m_Player.FindAction("Turn", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Slide = m_Player.FindAction("Slide", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -276,65 +203,10 @@ public partial class @TouchAction : IInputActionCollection2, IDisposable
         }
     }
     public TouchActions @Touch => new TouchActions(this);
-
-    // Player
-    private readonly InputActionMap m_Player;
-    private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_Turn;
-    private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Slide;
-    public struct PlayerActions
-    {
-        private @TouchAction m_Wrapper;
-        public PlayerActions(@TouchAction wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Turn => m_Wrapper.m_Player_Turn;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Slide => m_Wrapper.m_Player_Slide;
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        public void SetCallbacks(IPlayerActions instance)
-        {
-            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
-            {
-                @Turn.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurn;
-                @Turn.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurn;
-                @Turn.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurn;
-                @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Slide.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlide;
-                @Slide.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlide;
-                @Slide.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlide;
-            }
-            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Turn.started += instance.OnTurn;
-                @Turn.performed += instance.OnTurn;
-                @Turn.canceled += instance.OnTurn;
-                @Jump.started += instance.OnJump;
-                @Jump.performed += instance.OnJump;
-                @Jump.canceled += instance.OnJump;
-                @Slide.started += instance.OnSlide;
-                @Slide.performed += instance.OnSlide;
-                @Slide.canceled += instance.OnSlide;
-            }
-        }
-    }
-    public PlayerActions @Player => new PlayerActions(this);
     public interface ITouchActions
     {
         void OnPrimaryContact(InputAction.CallbackContext context);
         void OnPrimaryPosition(InputAction.CallbackContext context);
         void OnTap(InputAction.CallbackContext context);
-    }
-    public interface IPlayerActions
-    {
-        void OnTurn(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
-        void OnSlide(InputAction.CallbackContext context);
     }
 }

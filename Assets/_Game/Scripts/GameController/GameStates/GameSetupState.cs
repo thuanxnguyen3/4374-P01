@@ -24,14 +24,14 @@ public class GameSetupState : State
         Instantiate(_controller.PlayerUnitPrefab, _controller.PlayerUnitSpawnLocation.position,
         _controller.PlayerUnitSpawnLocation.rotation);
         */
-        _controller.UnitSpawner.Spawn(_controller.PlayerUnitPrefab, _controller.PlayerUnitSpawnLocation);
-
+        //_controller.UnitSpawner.Spawn(_controller.PlayerUnitPrefab, _controller.PlayerUnitSpawnLocation);
+        /*
         for (int i = 0; i < _controller.TileSpawner.tileStartCount; i++)
         {
             _controller.TileSpawner.Spawn(_controller.TileSpawner.startingTile.GetComponent<Tile>());
         }
-
         _controller.TileSpawner.Spawn(_controller.TileSpawner.SelectRandomGameObjectFromList(_controller.TileSpawner.turnTiles).GetComponent<Tile>());
+        */
         /*
         _controller.TileSpawner.Spawn(_controller.TileSpawner.turnTiles[0].GetComponent<Tile>());
         _controller.TileSpawner.AddNewDirection(Vector3.left);*/
@@ -50,6 +50,7 @@ public class GameSetupState : State
     public override void Tick()
     {
         base.Tick();
+
         _stateMachine.ChangeState(_stateMachine.PlayState);
     }
 }
