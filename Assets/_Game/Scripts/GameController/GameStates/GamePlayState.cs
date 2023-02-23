@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class GamePlayState : State
 {
     private GameFSM _stateMachine;
-    private GameController _controller;    
+    private GameController _controller;
 
     public GamePlayState(GameFSM stateMachine, GameController controller)
     {
@@ -42,7 +42,13 @@ public class GamePlayState : State
         base.Tick();
         if (_controller.PlayerUnitPrefab.isGameOver == true)
         {
-            Debug.Log("Game Over");
+            _controller.LoseScreen.SetActive(true);
+            _controller.LoseAudio.Play();
+
+        } else if (StateDuration >= _controller.WinConditionTime){
+            _controller.WinScreen.SetActive(true);
+            _controller.WinAudio.Play();
+
         }
         //Debug.Log("Checking for Win Condition");
         //Debug.Log("Checking for Lose Condition");

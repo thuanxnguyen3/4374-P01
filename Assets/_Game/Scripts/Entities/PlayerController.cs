@@ -22,10 +22,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     public LayerMask turnLayer;
     [SerializeField]
+    public LayerMask obstacleLayer;
+    [SerializeField]
     public Animator animator;
     [SerializeField]
     public AnimationClip slideAnimationClip;
-
+    [SerializeField]
     public float playerSpeed;
     public float gravity;
     public Vector3 movementDirection = Vector3.forward;
@@ -58,6 +60,8 @@ public class PlayerController : MonoBehaviour
             isGameOver = true;
             //return;
         }
+
+        //OnControllerColliderHit(isGameOver);
 
         characterController.Move(transform.forward * playerSpeed * Time.deltaTime);
 
@@ -211,8 +215,15 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    public bool GameOver()
+    public bool GameOver(bool isGameOver)
     {
-        return true;
+        return isGameOver;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (((1 << hit.collider.gameObject.layer) & obstacleLayer) != 0) {
+            isGameOver = true;
+        }
     }
 }
