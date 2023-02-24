@@ -44,10 +44,14 @@ public class GamePlayState : State
         {
             _controller.LoseScreen.SetActive(true);
             _controller.LoseAudio.Play();
+            _controller.PlayerUnitPrefab.gameObject.SetActive(false);
 
-        } else if (StateDuration >= _controller.WinConditionTime){
+        }
+        else if (StateDuration >= _controller.WinConditionTime){
             _controller.WinScreen.SetActive(true);
             _controller.WinAudio.Play();
+            _controller.PlayerUnitPrefab.gameObject.SetActive(false);
+            
 
         }
         //Debug.Log("Checking for Win Condition");
