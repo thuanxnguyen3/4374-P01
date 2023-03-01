@@ -1157,6 +1157,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1392528756128589374, guid: 5bada6f8aba0f974d95bb579d995826c,
         type: 3}
+      propertyPath: jumpHeight
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392528756128589374, guid: 5bada6f8aba0f974d95bb579d995826c,
+        type: 3}
+      propertyPath: playerSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392528756128589374, guid: 5bada6f8aba0f974d95bb579d995826c,
+        type: 3}
+      propertyPath: initialPlayerSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392528756128589374, guid: 5bada6f8aba0f974d95bb579d995826c,
+        type: 3}
       propertyPath: slideAnimationClip
       value: 
       objectReference: {fileID: 7400000, guid: 6550070c31182bf4595752e7b799dccc, type: 2}
