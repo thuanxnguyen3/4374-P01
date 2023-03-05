@@ -20,6 +20,9 @@ public class GameController : MonoBehaviour
     public AudioSource LoseAudio;
 
     [field: SerializeField]
+    public AudioSource BackgroundAudio;
+
+    [field: SerializeField]
     public PlayerController PlayerUnitPrefab { get; private set; }
     [field: SerializeField]
     public Transform PlayerUnitSpawnLocation { get; private set; }
@@ -31,5 +34,8 @@ public class GameController : MonoBehaviour
 
     [field: SerializeField]
     public InputManager InputManager { get; private set; }
+
+    [field: SerializeField]
+    public Timer Timer { get; private set; }
 }
 
