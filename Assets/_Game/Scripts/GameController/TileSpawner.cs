@@ -16,6 +16,8 @@ public class TileSpawner : MonoBehaviour
     public List<GameObject> turnTiles;
     [SerializeField]
     public List<GameObject> obstacles;
+    [SerializeField]
+    public List<GameObject> coins;
 
     private Vector3 currentTileLocation = Vector3.zero;
     private Vector3 currentTileDirection = Vector3.forward;
@@ -23,11 +25,13 @@ public class TileSpawner : MonoBehaviour
 
     private List<GameObject> currentTiles;
     private List<GameObject> currentObstacles;
+    private List<GameObject> currentCoins;
 
     private void Start()
     {
         currentTiles = new List<GameObject>();
         currentObstacles = new List<GameObject>();
+        currentCoins = new List<GameObject>();
 
         Random.InitState(System.DateTime.Now.Millisecond);
         for (int i = 0; i < tileStartCount; i++)
@@ -40,7 +44,7 @@ public class TileSpawner : MonoBehaviour
         //SpawnTile();
     }
 
-    public void SpawnTile(Tile tile, bool spawnObstacle = false)
+    public void SpawnTile(Tile tile, bool spawnObstacle = false, bool spawnCoin = false)
     {
         Quaternion newTileRotation = tile.gameObject.transform.rotation * Quaternion.LookRotation(currentTileDirection, Vector3.up);
 
@@ -48,6 +52,7 @@ public class TileSpawner : MonoBehaviour
         currentTiles.Add(prevTile);
 
         if (spawnObstacle) SpawnObstacle();
+        if (spawnCoin) SpawnCoin();
 
         if (tile.type == TileType.STRAIGHT)
         {
@@ -95,7 +100,7 @@ public class TileSpawner : MonoBehaviour
         int currentPathLength = Random.Range(minimumStraightTiles, maximumStraightTiles);
         for(int i = 0; i < currentPathLength; i++)
         {
-            SpawnTile(startingTile.GetComponent<Tile>(), (i == 0) ? false : true);
+            SpawnTile(startingTile.GetComponent<Tile>(), (i == 0) ? false : true, (i == 0) ? false : true);
         }
 
         SpawnTile(SelectRandomGameObjectFromList(turnTiles).GetComponent<Tile>(), false);
@@ -118,6 +123,21 @@ public class TileSpawner : MonoBehaviour
         if (list.Count == 0) return null;
 
         return list[Random.Range(0, list.Count)];
+    }
+
+    public void SpawnCoin()
+    {
+        if (Random.value > 0.6f) return;
+        
+        GameObject coinPrefab = SelectRandomGameObjectFromList(coins);
+
+        Quaternion newObjectRotation = coinPrefab.gameObject.transform.rotation * Quaternion.LookRotation(currentTileDirection, Vector3.up);
+
+        Vector3 coinPos = Vector3.up/2;
+
+        GameObject coin1 = Instantiate(coinPrefab, currentTileLocation + Vector3.up/2, newObjectRotation);
+        currentCoins.Add(coin1);
+        
     }
 
 }
